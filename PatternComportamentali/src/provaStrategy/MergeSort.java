@@ -4,20 +4,21 @@ public class MergeSort implements Strategy {
 
 	@Override
 	public void sort(Comparable[] a) {
-		Comparable[] tmp = new Comparable[a.length];
-		mergeSort(a, tmp, 0, a.length - 1);
+
+		mergeSort(a, 0, a.length - 1);
 	}
 
-	private static void mergeSort(Comparable[] a, Comparable[] tmp, int left, int right) {
+	private static void mergeSort(Comparable[] a, int left, int right) {
 		if (left < right) {
 			int center = (left + right) / 2;
-			mergeSort(a, tmp, left, center);
-			mergeSort(a, tmp, center + 1, right);
-			merge(a, tmp, left, center + 1, right);
+			mergeSort(a, left, center);
+			mergeSort(a, center + 1, right);
+			merge(a, left, center + 1, right);
 		}
 	}
 
-	private static void merge(Comparable[] a, Comparable[] tmp, int left, int right, int rightEnd) {
+	private static void merge(Comparable[] a, int left, int right, int rightEnd) {
+		Comparable[] tmp = new Comparable[a.length];
 		int leftEnd = right - 1;
 		int k = left;
 		int num = rightEnd - left + 1;

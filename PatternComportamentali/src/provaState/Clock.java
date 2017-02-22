@@ -1,13 +1,10 @@
 package provaState;
 
-import java.awt.Toolkit;
-
 public class Clock extends Thread {
 
 	mainFrame f;
 	int h, m, s;
 	int alH, alM;
-	protected boolean active;
 	provaState.State state;
 
 	Clock(mainFrame mainFrame) {
@@ -25,27 +22,9 @@ public class Clock extends Thread {
 	public void run() {
 		while (true) {
 			f.repaint();
-			if (h == alH && m == alM && !active)
-				new Thread(new Runnable() {
-
-					@Override
-					public void run() {
-						while (h == alH && m == alM && !active) {
-							active = true;
-							Toolkit.getDefaultToolkit().beep();
-							try {
-								state = new Alarmed(f.c);
-								Thread.sleep(300);
-								System.out.println("beep");
-							} catch (InterruptedException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-						}
-						active = false;
-						state = new NormalState();
-					}
-				}).start();
+			if (h == alH && m == alM && !(state instanceof Alarmed))
+				state = new Alarmed(this);
+			state.play();
 			try {
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {
